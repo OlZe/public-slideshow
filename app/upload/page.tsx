@@ -51,14 +51,16 @@ export default function UploadPage() {
   return (
     <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 gap-8">
       <h1 className="text-4xl font-bold text-center">
-        📸 Fotos hochladen
+        📸 Lade hier Fotos hoch, die auf dem Beamer angezeigt werden.
       </h1>
+      <p>Am Besten irgendwas Lustiges mit Leo oder so.</p>
+      <p>Hochgeladene Fotos können nicht wieder entfernt werden!</p>
 
       {/* SUCCESS STATE */}
       {success ? (
         <div className="flex flex-col items-center gap-6">
           <p className="text-xl text-center">
-            🎉 Upload erfolgreich!
+            🎉 Upload erfolgreich! Die Fotos kommen als Nächstes auf dem Beamer.
           </p>
 
           <button
