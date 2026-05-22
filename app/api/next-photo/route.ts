@@ -11,13 +11,13 @@ export async function GET() {
     const next = state.queue.shift()!;
     await writeState(state);
 
-    return NextResponse.json({ photo: next });
+    return NextResponse.json({ photo: `/api/photo/${next}` });
   }
 
   // 2. fallback: random from all files
-  const photosDir = path.join(process.cwd(), "public/photos");
+  const photosDir = path.join(process.cwd(), "uploads");
   const files = await readdir(photosDir);
-  const images = files.map((f) => `/photos/${f}`);
+  const images = files.map((f) => `/api/photo/${f}`);
 
   // shuffle once per request
   const shuffled = shuffle([...images]);

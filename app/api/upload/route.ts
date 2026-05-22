@@ -26,18 +26,16 @@ export async function POST(req: Request) {
 
     const filepath = path.join(
       process.cwd(),
-      "public/photos",
+      "uploads",
       filename
     );
-
-    await writeFile(filepath, buffer);
 
     await writeFile(filepath, buffer);
 
     // add to queue
     const state = await readState();
 
-    state.queue.push(`/photos/${filename}`);
+    state.queue.push(filename);
 
     await writeState(state);
 
