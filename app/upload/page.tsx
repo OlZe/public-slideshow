@@ -13,8 +13,8 @@ export default function UploadPage() {
     if (!files || files.length === 0) return;
 
     setUploading(true);
-    setError("");
     setSuccess(false);
+    setError("");
 
     try {
       for (const file of Array.from(files)) {
@@ -26,7 +26,9 @@ export default function UploadPage() {
           body: formData,
         });
 
-        if (!response.ok) throw new Error("Upload failed");
+        if (!response.ok) {
+          throw new Error("Upload failed");
+        }
       }
 
       setSuccess(true);
@@ -36,7 +38,6 @@ export default function UploadPage() {
     } finally {
       setUploading(false);
 
-      // reset file input so same files can be selected again
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -51,16 +52,27 @@ export default function UploadPage() {
   return (
     <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 gap-8">
       <h1 className="text-4xl font-bold text-center">
-        📸 Lade hier Fotos hoch, die auf dem Beamer angezeigt werden.
+        📸 Pack lustige Fotos auf die Leinwand!
       </h1>
-      <p>Am Besten irgendwas Lustiges mit Leo oder so.</p>
-      <p>Hochgeladene Fotos können nicht wieder entfernt werden!</p>
+      <p>Am Besten mit Leo oder so.<br></br>Hochgeladene Fotos können nicht wieder entfernt werden!</p>
+
+      {/* UPLOADING STATE */}
+      {uploading && (
+        <div className="text-center space-y-4">
+          <p className="text-2xl font-semibold">
+            Upload läuft...
+          </p>
+          <p className="text-white/70">
+            Bitte warten, deine Fotos werden hochgeladen
+          </p>
+        </div>
+      )}
 
       {/* SUCCESS STATE */}
-      {success ? (
+      {!uploading && success && (
         <div className="flex flex-col items-center gap-6">
           <p className="text-xl text-center">
-            🎉 Upload erfolgreich! Die Fotos kommen als Nächstes auf dem Beamer.
+            🎉 Upload erfolgreich! Deine Fotos werden als Nächstes angezeigt.
           </p>
 
           <button
@@ -70,8 +82,10 @@ export default function UploadPage() {
             Weitere Fotos hochladen...
           </button>
         </div>
-      ) : (
-        /* UPLOAD STATE */
+      )}
+
+      {/* IDLE STATE */}
+      {!uploading && !success && (
         <label className="w-full max-w-md border-2 border-dashed border-white/40 rounded-2xl p-10 text-center cursor-pointer active:scale-95 transition">
           <input
             ref={fileInputRef}
@@ -86,15 +100,10 @@ export default function UploadPage() {
             <p className="text-xl font-semibold">
               Tippe hier, um Fotos auszuwählen
             </p>
+
             <p className="text-sm text-white/70">
               Mehrere Bilder gleichzeitig möglich
             </p>
-
-            {uploading && (
-              <p className="text-white/80">
-                Upload läuft...
-              </p>
-            )}
           </div>
         </label>
       )}
